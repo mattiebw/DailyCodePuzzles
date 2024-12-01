@@ -60,10 +60,13 @@ class Program
             foreach (var task in taskArray)
             {
                 var ind = task.GetCustomAttribute<TaskAttribute>()!.Index;
+                var inputOverride = task.GetCustomAttribute<TaskAttribute>()!.InputIndexOverride;
+                var inputIndex = inputOverride == -1 ? ind : inputOverride;
+                
                 AnsiConsole.WriteLine($"Running task {ind}");
                 AnsiConsole.WriteLine("-----------------------");
                 var day = task.DeclaringType!.GetCustomAttribute<SolutionAttribute>()!.Day;
-                object?[] param = [inputs[task.DeclaringType!.Assembly].GetString($"Day{day}-Task{ind}")];
+                object?[] param = [inputs[task.DeclaringType!.Assembly].GetString($"Day{day}-Task{inputIndex}")];
                 task.Invoke(null, param);
                 AnsiConsole.WriteLine("-----------------------");
             }

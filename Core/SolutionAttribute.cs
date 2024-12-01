@@ -1,8 +1,9 @@
 ﻿namespace Core;
 
 [AttributeUsage(AttributeTargets.Assembly)]
-public class SolutionAssemblyAttribute(int year) : Attribute
+public class SolutionAssemblyAttribute(string puzzle, int year) : Attribute
 {
+    public String Puzzle = puzzle;
     public int Year = year;
 }
 
@@ -13,7 +14,8 @@ public class SolutionAttribute(int day) : Attribute
 }
 
 [AttributeUsage(AttributeTargets.Method)]
-public class TaskAttribute(int index) : Attribute
+public class TaskAttribute(int index, int inputIndexOverride = -1) : Attribute
 {
     public int Index = index;
+    public int InputIndexOverride = inputIndexOverride;
 }

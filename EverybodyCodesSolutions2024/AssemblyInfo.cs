@@ -1,3 +1,3 @@
 ﻿using Core;
 
-[assembly:SolutionAssembly(2024)]
+[assembly:SolutionAssembly("EC" , 2024)]
