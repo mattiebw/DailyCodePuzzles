@@ -60,21 +60,19 @@ class Program
         
             foreach (var task in taskArray)
             {
-                var ind = task.GetCustomAttribute<TaskAttribute>()!.Index;
-                var inputOverride = task.GetCustomAttribute<TaskAttribute>()!.InputIndexOverride;
-                var useTest = task.GetCustomAttribute<TaskAttribute>()!.UseTest;
-                var inputIndex = inputOverride == -1 ? ind : inputOverride;
+                var taskAttrib = task.GetCustomAttribute<TaskAttribute>()!;
+                var inputIndex = taskAttrib.InputIndexOverride == -1 ? taskAttrib.Index : taskAttrib.InputIndexOverride;
                 
-                AnsiConsole.WriteLine($"Running task {ind}");
+                AnsiConsole.WriteLine($"Running task {taskAttrib.Index}...");
                 AnsiConsole.WriteLine("-----------------------");
                 var day = task.DeclaringType!.GetCustomAttribute<SolutionAttribute>()!.Day;
-                object?[] param = [inputs[task.DeclaringType!.Assembly].GetString($"Day{day}-Task{inputIndex}{(useTest ? "-Test" : "")}")];
+                object?[] param = [inputs[task.DeclaringType!.Assembly].GetString($"Day{day}-Task{inputIndex}{(taskAttrib.UseTest ? "-Test" : "")}")];
                 Stopwatch sw = new();
                 sw.Restart();
                 task.Invoke(null, param);
                 sw.Stop();
                 AnsiConsole.WriteLine("-----------------------");
-                AnsiConsole.WriteLine($"Task {ind} took {sw.ElapsedMilliseconds}ms");
+                AnsiConsole.WriteLine($"Task {taskAttrib.Index} took {sw.ElapsedMilliseconds}ms");
                 AnsiConsole.WriteLine("-----------------------");
             }
         }
