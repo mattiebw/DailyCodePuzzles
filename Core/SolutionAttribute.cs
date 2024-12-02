@@ -14,8 +14,9 @@ public class SolutionAttribute(int day) : Attribute
 }
 
 [AttributeUsage(AttributeTargets.Method)]
-public class TaskAttribute(int index, int inputIndexOverride = -1) : Attribute
+public class TaskAttribute(int index, int inputIndexOverride = -1, bool useTest = false) : Attribute
 {
     public int Index = index;
     public int InputIndexOverride = inputIndexOverride;
+    public bool UseTest = useTest;
 }

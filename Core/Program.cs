@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 using System.Resources;
 using Spectre.Console;
 
@@ -61,13 +62,19 @@ class Program
             {
                 var ind = task.GetCustomAttribute<TaskAttribute>()!.Index;
                 var inputOverride = task.GetCustomAttribute<TaskAttribute>()!.InputIndexOverride;
+                var useTest = task.GetCustomAttribute<TaskAttribute>()!.UseTest;
                 var inputIndex = inputOverride == -1 ? ind : inputOverride;
                 
                 AnsiConsole.WriteLine($"Running task {ind}");
                 AnsiConsole.WriteLine("-----------------------");
                 var day = task.DeclaringType!.GetCustomAttribute<SolutionAttribute>()!.Day;
-                object?[] param = [inputs[task.DeclaringType!.Assembly].GetString($"Day{day}-Task{inputIndex}")];
+                object?[] param = [inputs[task.DeclaringType!.Assembly].GetString($"Day{day}-Task{inputIndex}{(useTest ? "-Test" : "")}")];
+                Stopwatch sw = new();
+                sw.Restart();
                 task.Invoke(null, param);
+                sw.Stop();
+                AnsiConsole.WriteLine("-----------------------");
+                AnsiConsole.WriteLine($"Task {ind} took {sw.ElapsedMilliseconds}ms");
                 AnsiConsole.WriteLine("-----------------------");
             }
         }
