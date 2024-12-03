@@ -34,21 +34,22 @@ public class Day1
     public static void Task2(string input)
     {
         List<long> left = new();
-        List<long> right = new();
+        Dictionary<long, long> rightList = new();
         
         foreach (var line in input.Split('\n'))
         {
             var parts = line.Trim().Split(Array.Empty<char>(), StringSplitOptions.RemoveEmptyEntries); // Splitting on null means split on whitespace
             left.Add(long.Parse(parts[0]));
-            right.Add(long.Parse(parts[1]));
+            long right = long.Parse(parts[1]);
+            if (!rightList.TryAdd(right, 1))
+                rightList[right]++;
         }
 
         left.Sort();
-        right.Sort();
 
         long total = 0;
         foreach (var t in left)
-            total += t * right.Count(l => l == t);
+            total += t * rightList.GetValueOrDefault(t, 0);
 
         Console.WriteLine($@"Our total is: {total}");
     }
